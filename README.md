@@ -8,6 +8,101 @@
 - A TypeScript runtime at `plugins/copilot-subagent/scripts/`
 - User-facing skills for setup, delegate, review, adversarial review, status, result, and cancel
 
+## Install
+
+### Prerequisites
+
+- Codex with plugin support
+- `git`, `node`, and `npm`
+- GitHub Copilot CLI installed and authenticated
+
+### Method 1: Ask Codex
+
+If you want Codex to do the installation work for you, open a normal Codex session and paste this:
+
+```text
+Clone https://github.com/CaseyHillers/copilot-plugin-codex into ~/.codex/plugins/copilot-plugin-codex. Then run npm install and npm run build in that repo. After that, create or update ~/.agents/plugins/marketplace.json so it includes a local plugin entry named copilot-subagent that points to ./.codex/plugins/copilot-plugin-codex/plugins/copilot-subagent, while preserving any existing marketplace entries. When you're done, tell me to restart Codex and install "Copilot Subagent" from /plugins.
+```
+
+After Codex finishes:
+
+1. Restart Codex.
+2. Open `/plugins`.
+3. Install `Copilot Subagent` from your personal plugin marketplace.
+4. Optionally run `copilot-setup` or the `doctor` command below to verify the runtime.
+
+### Method 2: Bash
+
+```bash
+set -euo pipefail
+
+mkdir -p "$HOME/.codex/plugins" "$HOME/.agents/plugins"
+
+if [ ! -d "$HOME/.codex/plugins/copilot-plugin-codex/.git" ]; then
+  git clone https://github.com/CaseyHillers/copilot-plugin-codex.git \
+    "$HOME/.codex/plugins/copilot-plugin-codex"
+fi
+
+git -C "$HOME/.codex/plugins/copilot-plugin-codex" pull --ff-only
+
+cd "$HOME/.codex/plugins/copilot-plugin-codex"
+npm install
+npm run build
+
+node --input-type=module <<'EOF'
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+const marketplacePath = path.join(
+  os.homedir(),
+  ".agents",
+  "plugins",
+  "marketplace.json",
+);
+
+const pluginEntry = {
+  name: "copilot-subagent",
+  source: {
+    source: "local",
+    path: "./.codex/plugins/copilot-plugin-codex/plugins/copilot-subagent",
+  },
+  policy: {
+    installation: "AVAILABLE",
+    authentication: "ON_INSTALL",
+  },
+  category: "Productivity",
+};
+
+let marketplace = {
+  name: "Personal Plugins",
+  interface: {
+    displayName: "Personal Plugins",
+  },
+  plugins: [],
+};
+
+if (fs.existsSync(marketplacePath)) {
+  marketplace = JSON.parse(fs.readFileSync(marketplacePath, "utf8"));
+  marketplace.plugins = Array.isArray(marketplace.plugins)
+    ? marketplace.plugins
+    : [];
+  marketplace.name ||= "Personal Plugins";
+  marketplace.interface ||= {};
+  marketplace.interface.displayName ||= "Personal Plugins";
+}
+
+marketplace.plugins = [
+  ...marketplace.plugins.filter((plugin) => plugin.name !== pluginEntry.name),
+  pluginEntry,
+];
+
+fs.writeFileSync(marketplacePath, `${JSON.stringify(marketplace, null, 2)}\n`);
+EOF
+```
+
+Then restart Codex, open `/plugins`, and install `Copilot Subagent`.
+
 ## Build
 
 From the repo root:
@@ -19,7 +114,7 @@ npm run build
 
 The compiled runtime lands at `plugins/copilot-subagent/scripts/dist/cli.js`.
 
-The compiled runtime is generated locally and not checked in. Re-run the build whenever you change anything under `plugins/copilot-subagent/scripts/src/`.
+The compiled runtime is generated locally and is not checked in. Fresh clones should run `npm run build` before using the plugin, and re-run the build whenever you change anything under `plugins/copilot-subagent/scripts/src/`.
 
 ## Runtime Commands
 
