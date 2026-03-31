@@ -1,0 +1,2 @@
+{"type":"assistant","sessionId":"session-success","message":{"content":[{"type":"output_text","text":"Implemented the requested change.\nCOPILOT_SUBAGENT_RESULT: {\"status\":\"completed\",\"summary\":\"Implemented the requested change.\",\"touchedFiles\":[\"src/example.ts\"],\"sessionId\":null,\"error\":null}"}]}}
+

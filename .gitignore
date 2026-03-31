@@ -1,0 +1,5 @@
+node_modules/
+plugins/copilot-subagent/.runtime/
+plugins/copilot-subagent/scripts/dist/
+*.tsbuildinfo
+

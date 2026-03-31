@@ -1,0 +1,18 @@
+{
+  "name": "copilot-plugin-codex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Repo-local Codex plugin that runs GitHub Copilot CLI as a delegated subagent.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf plugins/copilot-subagent/scripts/dist",
+    "test": "npm run build && tsx --test plugins/copilot-subagent/scripts/test/**/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  }
+}
+

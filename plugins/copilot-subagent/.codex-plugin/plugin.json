@@ -1,0 +1,37 @@
+{
+  "name": "copilot-subagent",
+  "version": "0.1.0",
+  "description": "Run GitHub Copilot CLI as a Codex plugin subagent for delegation and review workflows.",
+  "author": {
+    "name": "Casey Hillers",
+    "url": "https://github.com/CaseyHillers"
+  },
+  "homepage": "https://github.com/CaseyHillers/copilot-plugin-codex",
+  "repository": "https://github.com/CaseyHillers/copilot-plugin-codex",
+  "license": "MIT",
+  "keywords": [
+    "copilot",
+    "codex",
+    "subagent",
+    "review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Copilot Subagent",
+    "shortDescription": "Delegate work or reviews to GitHub Copilot CLI.",
+    "longDescription": "Use GitHub Copilot CLI as a Codex companion for delegated coding tasks, code review, and adversarial review flows.",
+    "developerName": "Casey Hillers",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/CaseyHillers/copilot-plugin-codex",
+    "defaultPrompt": [
+      "Use Copilot Subagent to delegate the current coding task.",
+      "Use Copilot Subagent to review my current changes.",
+      "Use Copilot Subagent to adversarially review this diff."
+    ],
+    "brandColor": "#0969DA"
+  }
+}

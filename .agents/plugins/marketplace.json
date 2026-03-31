@@ -1,0 +1,20 @@
+{
+  "name": "casey-local-plugins",
+  "interface": {
+    "displayName": "Casey Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "copilot-subagent",
+      "source": {
+        "source": "local",
+        "path": "./plugins/copilot-subagent"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
