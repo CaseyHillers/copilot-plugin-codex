@@ -1,31 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { repoRoot } from "./helpers/testUtils.js";
 
 const pluginRoot = path.join(repoRoot, "plugins", "copilot-subagent");
 
-test("plugin manifest and marketplace entry stay aligned", async () => {
+test("plugin manifest keeps the expected local-plugin shape", async () => {
   const manifest = JSON.parse(
     await readFile(path.join(pluginRoot, ".codex-plugin", "plugin.json"), "utf8"),
   ) as Record<string, unknown>;
-  const marketplace = JSON.parse(
-    await readFile(path.join(repoRoot, ".agents", "plugins", "marketplace.json"), "utf8"),
-  ) as { plugins: Array<Record<string, unknown>> };
 
   assert.equal(manifest.name, "copilot-subagent");
   assert.equal(manifest.skills, "./skills/");
   assert.ok(Array.isArray(manifest.keywords));
+});
 
-  const entry = marketplace.plugins.find(
-    (candidate) => candidate.name === "copilot-subagent",
-  );
-  assert.ok(entry);
-  assert.equal(
-    (entry?.source as { path?: string }).path,
-    "./plugins/copilot-subagent",
-  );
+test("compiled runtime exists after the build step", async () => {
+  await access(path.join(pluginRoot, "scripts", "dist", "cli.js"));
 });
 
 test("skills reference the built runtime and expected commands", async () => {
@@ -50,4 +42,3 @@ test("skills reference the built runtime and expected commands", async () => {
     }
   }
 });
-

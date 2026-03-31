@@ -13,7 +13,9 @@
     "copilot",
     "codex",
     "subagent",
-    "review"
+    "review",
+    "claude",
+    "gemini"
   ],
   "skills": "./skills/",
   "interface": {

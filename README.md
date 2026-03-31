@@ -5,7 +5,6 @@
 ## What It Ships
 
 - A plugin manifest at `plugins/copilot-subagent/.codex-plugin/plugin.json`
-- A repo marketplace entry at `.agents/plugins/marketplace.json`
 - A TypeScript runtime at `plugins/copilot-subagent/scripts/`
 - User-facing skills for setup, delegate, review, adversarial review, status, result, and cancel
 
@@ -19,6 +18,8 @@ npm run build
 ```
 
 The compiled runtime lands at `plugins/copilot-subagent/scripts/dist/cli.js`.
+
+The compiled runtime is generated locally and not checked in. Re-run the build whenever you change anything under `plugins/copilot-subagent/scripts/src/`.
 
 ## Runtime Commands
 
